@@ -1,3 +1,6 @@
 # Git LFS: 追踪大于100MB的模型权重文件
 results/ablation/sft_lora_r16/adapter_model.safetensors filter=lfs diff=lfs merge=lfs -text
 results/ablation/sft_lora_r32/adapter_model.safetensors filter=lfs diff=lfs merge=lfs -text
+data/sft_data/llava_sft.json filter=lfs diff=lfs merge=lfs -text
+data/mme_raw/data/test-00001-of-00004-7d22c7f1aba6fca4.parquet filter=lfs diff=lfs merge=lfs -text
+data/mme_raw/data/test-00002-of-00004-594798fd3f5b029c.parquet filter=lfs diff=lfs merge=lfs -text
