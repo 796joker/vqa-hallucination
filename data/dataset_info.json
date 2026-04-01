@@ -1,0 +1,38 @@
+{
+  "llava_sft": {
+    "file_name": "sft_data/llava_sft.json",
+    "formatting": "sharegpt",
+    "columns": {
+      "messages": "messages",
+      "images": "images"
+    },
+    "tags": {
+      "role_tag": "role",
+      "content_tag": "content",
+      "user_tag": "user",
+      "assistant_tag": "assistant"
+    }
+  },
+  "rlaifv_dpo": {
+    "file_name": "dpo_data/rlaifv_dpo.json",
+    "ranking": true,
+    "formatting": "sharegpt",
+    "columns": {
+      "messages": "conversations",
+      "chosen": "chosen",
+      "rejected": "rejected",
+      "images": "images"
+    }
+  },
+  "rlhf_v": {
+    "ranking": true,
+    "formatting": "sharegpt",
+    "columns": {
+      "messages": "conversations",
+      "chosen": "chosen",
+      "rejected": "rejected",
+      "images": "images"
+    },
+    "file_name": "/mnt/disk2/lijunlin/hf_cache/rlhf_v_data/rlhf-v.parquet"
+  }
+}

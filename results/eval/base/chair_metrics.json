@@ -1,0 +1,9 @@
+{
+  "CHAIR_s": 65.73,
+  "CHAIR_i": 33.31,
+  "Recall": 81.37,
+  "total_captions": 496,
+  "total_objects_mentioned": 1696,
+  "hallucinated_objects": 565,
+  "hallucinated_captions": 326
+}

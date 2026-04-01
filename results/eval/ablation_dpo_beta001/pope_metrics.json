@@ -1,0 +1,44 @@
+{
+  "pope_adversarial.json": {
+    "accuracy": 0.5,
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1": 0.0,
+    "yes_ratio": 0.0,
+    "total": 3000,
+    "adversarial_accuracy": 0.5,
+    "adversarial_precision": 0.0,
+    "adversarial_recall": 0.0,
+    "adversarial_f1": 0.0,
+    "adversarial_yes_ratio": 0.0,
+    "adversarial_total": 3000
+  },
+  "pope_popular.json": {
+    "accuracy": 0.5,
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1": 0.0,
+    "yes_ratio": 0.0,
+    "total": 3000,
+    "popular_accuracy": 0.5,
+    "popular_precision": 0.0,
+    "popular_recall": 0.0,
+    "popular_f1": 0.0,
+    "popular_yes_ratio": 0.0,
+    "popular_total": 3000
+  },
+  "pope_random.json": {
+    "accuracy": 0.5,
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1": 0.0,
+    "yes_ratio": 0.0,
+    "total": 3000,
+    "random_accuracy": 0.5,
+    "random_precision": 0.0,
+    "random_recall": 0.0,
+    "random_f1": 0.0,
+    "random_yes_ratio": 0.0,
+    "random_total": 3000
+  }
+}

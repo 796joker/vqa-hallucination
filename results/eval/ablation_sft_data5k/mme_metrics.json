@@ -1,0 +1,166 @@
+{
+  "existence": {
+    "accuracy": 98.33,
+    "accuracy_plus": 96.67,
+    "score": 58.5,
+    "max_score": 60,
+    "total_questions": 60,
+    "total_images": 30,
+    "correct": 59,
+    "pair_correct": 29,
+    "split": "perception"
+  },
+  "count": {
+    "accuracy": 90.0,
+    "accuracy_plus": 80.0,
+    "score": 51.0,
+    "max_score": 60,
+    "total_questions": 60,
+    "total_images": 30,
+    "correct": 54,
+    "pair_correct": 24,
+    "split": "perception"
+  },
+  "position": {
+    "accuracy": 83.33,
+    "accuracy_plus": 66.67,
+    "score": 45.0,
+    "max_score": 60,
+    "total_questions": 60,
+    "total_images": 30,
+    "correct": 50,
+    "pair_correct": 20,
+    "split": "perception"
+  },
+  "color": {
+    "accuracy": 95.0,
+    "accuracy_plus": 90.0,
+    "score": 55.5,
+    "max_score": 60,
+    "total_questions": 60,
+    "total_images": 30,
+    "correct": 57,
+    "pair_correct": 27,
+    "split": "perception"
+  },
+  "posters": {
+    "accuracy": 94.9,
+    "accuracy_plus": 90.48,
+    "score": 272.5,
+    "max_score": 294,
+    "total_questions": 294,
+    "total_images": 147,
+    "correct": 279,
+    "pair_correct": 133,
+    "split": "perception"
+  },
+  "celebrity": {
+    "accuracy": 83.24,
+    "accuracy_plus": 66.47,
+    "score": 254.5,
+    "max_score": 340,
+    "total_questions": 340,
+    "total_images": 170,
+    "correct": 283,
+    "pair_correct": 113,
+    "split": "perception"
+  },
+  "scene": {
+    "accuracy": 86.5,
+    "accuracy_plus": 74.0,
+    "score": 321.0,
+    "max_score": 400,
+    "total_questions": 400,
+    "total_images": 200,
+    "correct": 346,
+    "pair_correct": 148,
+    "split": "perception"
+  },
+  "landmark": {
+    "accuracy": 87.5,
+    "accuracy_plus": 75.0,
+    "score": 325.0,
+    "max_score": 400,
+    "total_questions": 400,
+    "total_images": 200,
+    "correct": 350,
+    "pair_correct": 150,
+    "split": "perception"
+  },
+  "artwork": {
+    "accuracy": 78.0,
+    "accuracy_plus": 59.5,
+    "score": 275.0,
+    "max_score": 400,
+    "total_questions": 400,
+    "total_images": 200,
+    "correct": 312,
+    "pair_correct": 119,
+    "split": "perception"
+  },
+  "OCR": {
+    "accuracy": 90.0,
+    "accuracy_plus": 80.0,
+    "score": 34.0,
+    "max_score": 40,
+    "total_questions": 40,
+    "total_images": 20,
+    "correct": 36,
+    "pair_correct": 16,
+    "split": "perception"
+  },
+  "commonsense_reasoning": {
+    "accuracy": 83.57,
+    "accuracy_plus": 68.57,
+    "score": 106.5,
+    "max_score": 140,
+    "total_questions": 140,
+    "total_images": 70,
+    "correct": 117,
+    "pair_correct": 48,
+    "split": "cognition"
+  },
+  "numerical_calculation": {
+    "accuracy": 85.0,
+    "accuracy_plus": 70.0,
+    "score": 31.0,
+    "max_score": 40,
+    "total_questions": 40,
+    "total_images": 20,
+    "correct": 34,
+    "pair_correct": 14,
+    "split": "cognition"
+  },
+  "text_translation": {
+    "accuracy": 92.5,
+    "accuracy_plus": 85.0,
+    "score": 35.5,
+    "max_score": 40,
+    "total_questions": 40,
+    "total_images": 20,
+    "correct": 37,
+    "pair_correct": 17,
+    "split": "cognition"
+  },
+  "code_reasoning": {
+    "accuracy": 90.0,
+    "accuracy_plus": 80.0,
+    "score": 34.0,
+    "max_score": 40,
+    "total_questions": 40,
+    "total_images": 20,
+    "correct": 36,
+    "pair_correct": 16,
+    "split": "cognition"
+  },
+  "_summary": {
+    "perception_score": 1692.0,
+    "cognition_score": 207.0,
+    "total_score": 1899.0,
+    "perception_max": 2000,
+    "cognition_max": 800,
+    "total_max": 2800,
+    "total_questions": 2374,
+    "total_categories": 14
+  }
+}

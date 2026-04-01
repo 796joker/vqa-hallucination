@@ -1,0 +1,44 @@
+{
+  "pope_adversarial.json": {
+    "accuracy": 0.8043333333333333,
+    "precision": 0.7858484658735129,
+    "recall": 0.8366666666666667,
+    "f1": 0.8104617371649984,
+    "yes_ratio": 0.5323333333333333,
+    "total": 3000,
+    "adversarial_accuracy": 0.8043333333333333,
+    "adversarial_precision": 0.7858484658735129,
+    "adversarial_recall": 0.8366666666666667,
+    "adversarial_f1": 0.8104617371649984,
+    "adversarial_yes_ratio": 0.5323333333333333,
+    "adversarial_total": 3000
+  },
+  "pope_popular.json": {
+    "accuracy": 0.854,
+    "precision": 0.8662068965517241,
+    "recall": 0.8373333333333334,
+    "f1": 0.8515254237288136,
+    "yes_ratio": 0.48333333333333334,
+    "total": 3000,
+    "popular_accuracy": 0.854,
+    "popular_precision": 0.8662068965517241,
+    "popular_recall": 0.8373333333333334,
+    "popular_f1": 0.8515254237288136,
+    "popular_yes_ratio": 0.48333333333333334,
+    "popular_total": 3000
+  },
+  "pope_random.json": {
+    "accuracy": 0.8813333333333333,
+    "precision": 0.9181286549707602,
+    "recall": 0.8373333333333334,
+    "f1": 0.8758716875871687,
+    "yes_ratio": 0.456,
+    "total": 3000,
+    "random_accuracy": 0.8813333333333333,
+    "random_precision": 0.9181286549707602,
+    "random_recall": 0.8373333333333334,
+    "random_f1": 0.8758716875871687,
+    "random_yes_ratio": 0.456,
+    "random_total": 3000
+  }
+}

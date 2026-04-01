@@ -1,0 +1,49 @@
+### Model
+model_name_or_path: ../downloads/models/Qwen3-VL-8B-Instruct
+image_max_pixels: 262144
+video_max_pixels: 16384
+trust_remote_code: true
+
+### Method
+stage: sft
+do_train: true
+finetuning_type: lora
+lora_rank: 64
+lora_alpha: 128
+lora_target: all
+lora_dropout: 0.05
+
+### Dataset
+dataset: llava_sft
+dataset_dir: data
+template: qwen3_vl
+cutoff_len: 2048
+max_samples: 50000
+preprocessing_num_workers: 16
+dataloader_num_workers: 4
+
+### Output
+output_dir: results/ablation/sft_r64
+logging_steps: 10
+save_steps: 500
+save_total_limit: 3
+plot_loss: true
+overwrite_output_dir: false
+resume_from_checkpoint: null
+report_to: tensorboard
+
+### Train
+per_device_train_batch_size: 2
+gradient_accumulation_steps: 8
+learning_rate: 1.0e-4
+num_train_epochs: 2.0
+lr_scheduler_type: cosine
+warmup_ratio: 0.1
+bf16: true
+ddp_timeout: 180000000
+
+### Eval
+val_size: 0.02
+per_device_eval_batch_size: 2
+eval_strategy: steps
+eval_steps: 500
