@@ -33,6 +33,6 @@
       "rejected": "rejected",
       "images": "images"
     },
-    "file_name": "/mnt/disk2/lijunlin/hf_cache/rlhf_v_data/rlhf-v.parquet"
+    "file_name": "dpo_data/rlhf-v.parquet"
   }
 }
