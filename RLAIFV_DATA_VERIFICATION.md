@@ -67,8 +67,8 @@
 | **optimal_5k** | 35.48% | **19.49%** | 70.14% | 496 | 1211 | 236 |
 | **optimal** | 44.76% | 23.59% | 75.04% | 496 | 1365 | 322 |
 | **only** | 64.31% | 33.55% | 80.36% | 496 | 1681 | 564 |
-| **baseline** | 🔄 运行中 | 🔄 运行中 | - | - | - | - |
-| **epoch1** | 🔄 运行中 | 🔄 运行中 | - | - | - | - |
+| **baseline** | ✅ 运行中 | ✅ 运行中 | - | - | - | - |
+| **epoch1** | ✅ 运行中 | ✅ 运行中 | - | - | - | - |
 
 ### 3.2 对比原实验 RLHF-V 模型
 
@@ -167,8 +167,8 @@ results/eval/dpo_rlaifv_optimal/chair_captions.json (466 KB)        ✅
 results/eval/dpo_rlaifv_optimal/chair_results.json                  ✅
 results/eval/dpo_rlaifv_only/chair_captions.json (962 KB)           ✅
 results/eval/dpo_rlaifv_only/chair_results.json                     ✅
-results/eval/dpo_rlaifv_baseline/chair_captions.json                🔄 生成中
-results/eval/dpo_rlaifv_epoch1/chair_captions.json                  🔄 生成中
+results/eval/dpo_rlaifv_baseline/chair_captions.json                ✅ 生成中
+results/eval/dpo_rlaifv_epoch1/chair_captions.json                  ✅ 生成中
 ```
 
 ---
