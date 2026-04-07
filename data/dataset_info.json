@@ -34,5 +34,16 @@
       "images": "images"
     },
     "file_name": "dpo_data/rlhf-v.parquet"
+  },
+  "rlaifv_dpo_5k": {
+    "file_name": "dpo_data/rlaifv_dpo_5k.json",
+    "ranking": true,
+    "formatting": "sharegpt",
+    "columns": {
+      "messages": "conversations",
+      "chosen": "chosen",
+      "rejected": "rejected",
+      "images": "images"
+    }
   }
 }

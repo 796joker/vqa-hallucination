@@ -10,20 +10,20 @@ cd "${PROJECT_DIR}"
 
 echo "=== Launching Gradio Demo ==="
 echo "Base model: ${MODEL_PATH}"
-echo "Adapter: results/dpo/lora_r8_beta01"
+echo "Adapter: results/ablation/dpo_true_optimal (SFT 5K + DPO beta=1.0 1ep)"
 echo ""
 
-# Default: load both models in bf16 (~32GB total)
+# Default: load both models in bf16 (~32GB total, needs GPU with >=40GB free)
 CUDA_VISIBLE_DEVICES=4 python demo/app.py \
     --model_path "${MODEL_PATH}" \
-    --adapter_path results/dpo/lora_r8_beta01 \
+    --adapter_path results/ablation/dpo_true_optimal \
     --port 7860 \
     --share
 
-# If OOM, use 4-bit quantization:
+# If OOM, use 4-bit quantization (~16GB total):
 # CUDA_VISIBLE_DEVICES=4 python demo/app.py \
 #     --model_path "${MODEL_PATH}" \
-#     --adapter_path results/dpo/lora_r8_beta01 \
+#     --adapter_path results/ablation/dpo_true_optimal \
 #     --use_4bit \
 #     --port 7860 \
 #     --share

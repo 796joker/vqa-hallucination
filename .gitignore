@@ -44,3 +44,6 @@ __pycache__/
 *~
 .DS_Store
 Thumbs.db
+data/dpo_data/rlaifv_images/
+*.bin
+results/ablation/dpo_rlaifv_*/adapter_model.safetensors
