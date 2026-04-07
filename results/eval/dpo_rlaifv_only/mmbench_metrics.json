@@ -1,0 +1,141 @@
+{
+  "action_recognition": {
+    "accuracy": 98.14,
+    "correct": 211,
+    "total": 215
+  },
+  "attribute_comparison": {
+    "accuracy": 87.23,
+    "correct": 123,
+    "total": 141
+  },
+  "attribute_recognition": {
+    "accuracy": 96.21,
+    "correct": 254,
+    "total": 264
+  },
+  "celebrity_recognition": {
+    "accuracy": 97.22,
+    "correct": 385,
+    "total": 396
+  },
+  "function_reasoning": {
+    "accuracy": 94.08,
+    "correct": 286,
+    "total": 304
+  },
+  "future_prediction": {
+    "accuracy": 70.77,
+    "correct": 92,
+    "total": 130
+  },
+  "identity_reasoning": {
+    "accuracy": 97.73,
+    "correct": 172,
+    "total": 176
+  },
+  "image_emotion": {
+    "accuracy": 85.0,
+    "correct": 170,
+    "total": 200
+  },
+  "image_quality": {
+    "accuracy": 73.33,
+    "correct": 110,
+    "total": 150
+  },
+  "image_scene": {
+    "accuracy": 98.03,
+    "correct": 399,
+    "total": 407
+  },
+  "image_style": {
+    "accuracy": 94.81,
+    "correct": 201,
+    "total": 212
+  },
+  "image_topic": {
+    "accuracy": 92.14,
+    "correct": 129,
+    "total": 140
+  },
+  "nature_relation": {
+    "accuracy": 89.94,
+    "correct": 161,
+    "total": 179
+  },
+  "object_localization": {
+    "accuracy": 79.68,
+    "correct": 251,
+    "total": 315
+  },
+  "ocr": {
+    "accuracy": 96.15,
+    "correct": 150,
+    "total": 156
+  },
+  "physical_property_reasoning": {
+    "accuracy": 81.28,
+    "correct": 178,
+    "total": 219
+  },
+  "physical_relation": {
+    "accuracy": 78.72,
+    "correct": 74,
+    "total": 94
+  },
+  "social_relation": {
+    "accuracy": 93.02,
+    "correct": 160,
+    "total": 172
+  },
+  "spatial_relationship": {
+    "accuracy": 70.62,
+    "correct": 125,
+    "total": 177
+  },
+  "structuralized_imagetext_understanding": {
+    "accuracy": 88.65,
+    "correct": 250,
+    "total": 282
+  },
+  "_summary": {
+    "overall_accuracy": 89.65,
+    "total_correct": 3881,
+    "total_questions": 4329,
+    "categories": 20,
+    "circular_eval": false
+  },
+  "_l2_categories": {
+    "attribute_reasoning": {
+      "accuracy": 90.99,
+      "correct": 636,
+      "total": 699
+    },
+    "coarse_perception": {
+      "accuracy": 90.98,
+      "correct": 1009,
+      "total": 1109
+    },
+    "finegrained_perception (cross-instance)": {
+      "accuracy": 86.12,
+      "correct": 459,
+      "total": 533
+    },
+    "finegrained_perception (instance-level)": {
+      "accuracy": 91.95,
+      "correct": 1040,
+      "total": 1131
+    },
+    "logic_reasoning": {
+      "accuracy": 83.01,
+      "correct": 342,
+      "total": 412
+    },
+    "relation_reasoning": {
+      "accuracy": 88.76,
+      "correct": 395,
+      "total": 445
+    }
+  }
+}

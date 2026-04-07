@@ -47,3 +47,5 @@ Thumbs.db
 data/dpo_data/rlaifv_images/
 *.bin
 results/ablation/dpo_rlaifv_*/adapter_model.safetensors
+data/mmbench/images/
+verify_mmbench.py
