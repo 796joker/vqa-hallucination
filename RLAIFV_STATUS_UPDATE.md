@@ -1,7 +1,7 @@
 # RLAIF-V 补充实验状态更新
 
 > 更新时间: 2026-04-07 (最终更新)
-> 状态: Phase 1 训练完成 ✅, Phase 2 POPE完成 ✅, CHAIR 100%完成 ✅
+> 状态: Phase 1 训练完成 ✅, Phase 2 POPE完成 ✅, CHAIR 100%完成 ✅, MMBench 100%完成 ✅
 
 ---
 
@@ -13,8 +13,8 @@
 | **Phase 1** | DPO 训练 (5个模型) | ✅ 完成 | 100% |
 | **Phase 2** | POPE 评估 (5×3 splits) | ✅ 完成 | 100% |
 | **Phase 2** | CHAIR 评估 (5个模型) | ✅ 完成 | 100% (5/5) |
-| **Phase 3** | MMBench 脚本编写 | ⏳ 待开始 | 0% |
-| **Phase 3** | MMBench 评估执行 | ⏳ 待开始 | 0% |
+| **Phase 3** | MMBench 脚本编写 | ✅ 完成 | 100% |
+| **Phase 3** | MMBench 评估执行 (4个模型) | ✅ 完成 | 100% (4/4) |
 
 ---
 
@@ -40,10 +40,18 @@
    - baseline: CHAIR_i=18.83% ✅
    - epoch1: CHAIR_i=16.32% ✅ (所有模型中最低)
 
-### ⏳ 待完成
+### ✅ 已完成（全部）
 
-1. **编写 MMBench 评估脚本** (~2h, P2 可选)
-2. **执行 MMBench 评估** (4个模型, ~4h, P2 可选)
+1. **编写 MMBench 评估脚本** ✅ (2026-04-07 15:50)
+   - `data/prepare_mmbench.py`: 从 parquet 提取图片和问题
+   - `eval/generate_mmbench_answers.py`: 多选题推理 + CircularEval 支持
+   - `eval/eval_mmbench.py`: 准确率计算（overall + 20 类别 + L2 子类别）
+2. **执行 MMBench 评估** ✅ (2026-04-07 16:46, 4个模型)
+   - Base: 89.72%
+   - SFT 5K: 89.35%
+   - RLAIF-V optimal_5k: 89.47%
+   - RLAIF-V only: 89.65%
+   - 数据: MMBench-EN dev split, 4329 题, 20 个能力类别
 
 ---
 
@@ -116,13 +124,22 @@ git push origin main
 
 ### RLAIF-V 补充实验完整结果
 
-| 模型 | SFT基础 | DPO规模 | POPE F1 | CHAIR_i | CHAIR_s | Recall |
-|------|---------|---------|---------|---------|---------|--------|
-| optimal_5k | SFT 5K | 5.7K | **0.9184** | 19.49% | 35.48% | 70.14% |
-| baseline | SFT 50K | 20K×3ep | 0.9063 | 18.83% | 35.69% | 69.14% |
-| epoch1 | SFT 50K | 20K×1ep | 0.8955 | **16.32%** | **30.24%** | 67.12% |
-| optimal | SFT 5K | 20K | 0.9086 | 23.59% | 44.76% | 75.04% |
-| only | 无 | 20K×3ep | 0.9126 | 33.55% | 64.31% | 80.36% |
+| 模型 | SFT基础 | DPO规模 | POPE F1 | CHAIR_i | CHAIR_s | Recall | MMBench |
+|------|---------|---------|---------|---------|---------|--------|---------|
+| optimal_5k | SFT 5K | 5.7K | **0.9184** | 19.49% | 35.48% | 70.14% | 89.47% |
+| baseline | SFT 50K | 20K×3ep | 0.9063 | 18.83% | 35.69% | 69.14% | — |
+| epoch1 | SFT 50K | 20K×1ep | 0.8955 | **16.32%** | **30.24%** | 67.12% | — |
+| optimal | SFT 5K | 20K | 0.9086 | 23.59% | 44.76% | 75.04% | — |
+| only | 无 | 20K×3ep | 0.9126 | 33.55% | 64.31% | 80.36% | 89.65% |
+
+### MMBench 完整结果 (4个关键模型)
+
+| 模型 | MMBench Acc | 最强类别 | 最弱类别 |
+|------|-----------|---------|---------|
+| Base | **89.72%** | image_scene 98.0% | future_prediction 70.8% |
+| SFT 5K | 89.35% | ocr 98.1% | image_quality 67.3% |
+| RLAIF-V optimal_5k | 89.47% | ocr 98.7% | image_quality 68.7% |
+| RLAIF-V only | 89.65% | image_scene 98.0% | spatial_relationship 70.6% |
 
 ### 核心发现
 

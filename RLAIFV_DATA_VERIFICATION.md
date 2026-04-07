@@ -4,7 +4,7 @@
 > 验证方法: 从服务器 results/ablation/dpo_rlaifv_*/trainer_state.json 和 results/eval/dpo_rlaifv_*/pope_*.json 原始文件提取
 > 训练数据: RLAIF-V (AI标注, 从83K中采样), 对比原实验的RLHF-V (5.7K人工标注)
 > 训练完成: 2026-04-06 18:32 - 2026-04-07 05:47
-> 评估完成: POPE (100%), CHAIR (100%, 全部完成)
+> 评估完成: POPE (100%), CHAIR (100%, 全部完成), MMBench (100%, 4个关键模型)
 
 ---
 
@@ -136,16 +136,48 @@
 
 ---
 
-## 五、待完成任务
+## 五、MMBench 评估结果 (一般能力保持)
 
-- [x] **baseline CHAIR 评估**: ✅ 2026-04-07 完成 (CHAIR_i=18.83%, CHAIR_s=35.69%)
-- [x] **epoch1 CHAIR 评估**: ✅ 2026-04-07 完成 (CHAIR_i=16.32%, CHAIR_s=30.24%)
-- [ ] **MMBench 评估脚本**: 需编写 generate_mmbench_answers.py 和 eval_mmbench.py (P2, 可选)
-- [ ] **MMBench 评估执行**: 4 个关键模型 (base, sft5k, rlaifv_optimal_5k, rlaifv_only) (P2, 可选)
+### 5.1 完整结果 (MMBench-EN dev split, 4329 题, 20 类别)
+
+| 模型 | MMBench Acc | Correct/Total | 最强类别 | 最弱类别 |
+|------|-----------|---------------|---------|---------|
+| Base | **89.72%** | 3884/4329 | image_scene 98.0% | future_prediction 70.8% |
+| SFT 5K | 89.35% | 3868/4329 | ocr 98.1% | image_quality 67.3% |
+| RLAIF-V optimal_5k | 89.47% | 3873/4329 | ocr 98.7% | image_quality 68.7% |
+| RLAIF-V only | 89.65% | 3881/4329 | image_scene 98.0% | spatial_relationship 70.6% |
+
+### 5.2 关键发现
+
+1. **一般能力几乎无损失**: 所有后训练模型与 Base 差异 <0.37pp，说明 SFT+DPO 未破坏模型的多选推理能力
+2. **与 MME 结论一致**: MME 评估 True Optimal 保持 99.1% (1990.5/2008.0)，MMBench 同样显示能力保持
+3. **DPO-only 也保持能力**: RLAIF-V only (89.65%) 接近 Base (89.72%)，说明 DPO 训练不损害一般能力
+
+### 5.3 评估文件
+
+```bash
+results/eval/base/mmbench_answers.json (1.3MB)              ✅
+results/eval/base/mmbench_metrics.json (2.6KB)              ✅
+results/eval/sft_data5k/mmbench_answers.json (1.3MB)        ✅
+results/eval/sft_data5k/mmbench_metrics.json (2.6KB)        ✅
+results/eval/dpo_rlaifv_optimal_5k/mmbench_answers.json (1.3MB)  ✅
+results/eval/dpo_rlaifv_optimal_5k/mmbench_metrics.json (2.6KB)  ✅
+results/eval/dpo_rlaifv_only/mmbench_answers.json (1.3MB)        ✅
+results/eval/dpo_rlaifv_only/mmbench_metrics.json (2.6KB)        ✅
+```
 
 ---
 
-## 六、数据完整性验证
+## 六、任务完成清单
+
+- [x] **baseline CHAIR 评估**: ✅ 2026-04-07 完成 (CHAIR_i=18.83%, CHAIR_s=35.69%)
+- [x] **epoch1 CHAIR 评估**: ✅ 2026-04-07 完成 (CHAIR_i=16.32%, CHAIR_s=30.24%)
+- [x] **MMBench 评估脚本**: ✅ 2026-04-07 完成 (prepare_mmbench.py + generate_mmbench_answers.py + eval_mmbench.py)
+- [x] **MMBench 评估执行**: ✅ 2026-04-07 完成 (4 个关键模型: base, sft5k, rlaifv_optimal_5k, rlaifv_only)
+
+---
+
+## 七、数据完整性验证
 
 ### 训练 Checkpoints
 
@@ -184,7 +216,7 @@ results/eval/dpo_rlaifv_epoch1/chair_results.json                  ✅
 
 ---
 
-## 七、Git 同步检查清单
+## 八、Git 同步检查清单
 
 准备推送到远程仓库:
 
@@ -195,5 +227,7 @@ results/eval/dpo_rlaifv_epoch1/chair_results.json                  ✅
 - [x] 评估日志 (logs/eval_pope_rlaifv_*.log, logs/chair_rlaifv_*.log)
 - [x] 本数据验证文档 (RLAIFV_DATA_VERIFICATION.md)
 - [x] 更新 RLAIFV_MMBENCH_PLAN.md 状态
+- [x] 3 个 MMBench 评估脚本
+- [x] 8 个 MMBench 结果文件 (4 answers + 4 metrics)
 
-**预计推送大小**: ~30 MB (主要是 JSON 预测文件)
+**预计推送大小**: ~40 MB (主要是 JSON 预测文件)
