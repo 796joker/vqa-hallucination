@@ -1,0 +1,13 @@
+# VQA Hallucination Demo - Dependencies
+# Install: pip install -r requirements.txt
+
+torch>=2.4.0
+transformers==4.57.6
+peft==0.18.1
+accelerate==1.11.0
+gradio==5.50.0
+qwen-vl-utils==0.0.14
+Pillow>=11.0.0
+
+# For 4-bit quantization (--use_4bit), also install:
+# pip install bitsandbytes>=0.44.0

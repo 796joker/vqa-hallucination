@@ -48,3 +48,10 @@ data/dpo_data/rlaifv_images/
 *.bin
 data/mmbench/images/
 verify_mmbench.py
+
+# ===========================
+# Demo 示例图片（通过脚本下载）
+# ===========================
+demo/examples/*.jpg
+demo/examples/*.jpeg
+demo/examples/*.png

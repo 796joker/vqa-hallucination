@@ -21,7 +21,7 @@ echo "Base adapter: results/sft/lora_r8"
 echo "Output: results/dpo/lora_r8_beta01"
 echo ""
 
-FORCE_TORCHRUN=1 NNODES=1 NPROC_PER_NODE=2 CUDA_VISIBLE_DEVICES=4,5 llamafactory-cli train configs/qwen3vl_dpo_lora.yaml
+FORCE_TORCHRUN=1 NNODES=1 NPROC_PER_NODE=2 CUDA_VISIBLE_DEVICES=${CUDA_VISIBLE_DEVICES:-0,1} llamafactory-cli train configs/qwen3vl_dpo_lora.yaml
 
 echo ""
 echo "=== DPO Training Complete ==="

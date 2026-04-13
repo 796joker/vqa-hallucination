@@ -7,7 +7,7 @@ set -e
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 source "${SCRIPT_DIR}/config.sh"
 cd "${PROJECT_DIR}"
-export CUDA_VISIBLE_DEVICES=4
+export CUDA_VISIBLE_DEVICES=${CUDA_VISIBLE_DEVICES:-0}
 
 echo "=== Evaluating Base Model ==="
 python eval/generate_pope_answers.py \

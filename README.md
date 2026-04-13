@@ -26,8 +26,18 @@
 │   ├── eval/         # 所有模型的评估结果（JSON）
 │   ├── case_studies/ # 案例研究输出
 │   └── figures/      # 热力图等可视化
-├── EXPERIMENT_PLAN.md
-└── NEXT_STEPS.md
+├── report/
+│   ├── figures/      # 可视化图表（25张）
+│   ├── chapters/     # 中文技术报告（8章）
+│   └── 技术报告_完整版.md
+└── docs/
+    ├── 课程报告.md       # 课程提交报告
+    ├── DEMO_DEPLOY_GUIDE.md  # Demo部署指南
+    ├── DATA_VERIFICATION.md  # 数据校验报告
+    ├── PROJECT_STATUS.md     # 项目状态
+    ├── ISSUES_AND_FIXES.md   # 问题排查记录
+    ├── slides.md             # 演示幻灯片
+    └── presentation.pptx     # PPT
 ```
 
 ## 基座模型（未包含在仓库中）
@@ -53,7 +63,7 @@
 python data/prepare_sft_data.py --input data/llava_instruct_150k.json --sizes 5000 10000 25000 50000
 
 # 2. DPO数据准备
-python data/prepare_dpo_data.py --input data/rlhf_v_dataset.json
+python data/prepare_dpo_data.py --input data/dpo_data/rlhf-v.parquet
 
 # 3. POPE数据准备
 python data/prepare_pope.py --coco_ann data/coco_val2014_chair_annots.json

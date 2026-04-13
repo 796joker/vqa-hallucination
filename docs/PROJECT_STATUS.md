@@ -19,7 +19,7 @@
 
 ## 二、已完成的工作
 
-### 实验 (全部在 236 服务器: ssh research@115.190.215.236)
+### 实验 (全部在 236 服务器)
 - [x] 20 组模型训练 (8 SFT + 12 DPO)
 - [x] POPE 评估: 20 模型 × 3 splits = 60 组
 - [x] CHAIR 评估: 17 模型
@@ -28,10 +28,10 @@
 - [x] 数据全量验证 → DATA_VERIFICATION.md
 
 ### 文档
-- [x] 课程报告 (`课程报告.md`) — 4-6 页, 含 Q&A 准备, 数据已校验
+- [x] 课程报告 (`docs/课程报告.md`) — 4-6 页, 含 Q&A 准备, 数据已校验
 - [x] 实验数据验证 (`DATA_VERIFICATION.md`) — 已推送至 GitHub
-- [x] 技术报告 (`TECHNICAL_REPORT.md`) — 25000 字完整版 (备用)
-- [x] 修复计划 (`FIX_PLAN.md`) — RLAIF-V/MMBench 备选方案
+- [x] 技术报告 (`report/技术报告_完整版.md`) — 25000 字完整版
+- [x] 修复计划 — RLAIF-V/MMBench 备选方案 (已完成)
 
 ### 代码 & 仓库
 - [x] GitHub: https://github.com/796joker/vqa-hallucination
@@ -68,17 +68,17 @@
 
 ## 四、备选数据 (已下载, 未使用)
 
-| 数据集 | 位置 (236 服务器) | 大小 | 用途 |
-|--------|-----------------|------|------|
-| RLAIF-V | /mnt/disk2/lijunlin/downloads/datasets/RLAIF-V/ | 12GB | 如需重跑 DPO |
-| MMBench | /mnt/disk2/lijunlin/downloads/datasets/MMBench/ | 503MB | 如需补跑评估 |
+| 数据集 | 大小 | 用途 |
+|--------|------|------|
+| RLAIF-V | 12GB | 如需重跑 DPO |
+| MMBench | 503MB | 如需补跑评估 |
 
 ---
 
 ## 五、课程展示准备清单
 
 ### 报告 (20%) — 已完成
-- [x] 课程报告 (`课程报告.md`): 摘要→引言→方法→实验→分析→附录
+- [x] 课程报告 (`docs/课程报告.md`): 摘要→引言→方法→实验→分析→附录
 - [x] 实验设计思想说明 (Section 2.1)
 - [x] 服务器环境详情 (附录 B)
 - [x] 数据集选型说明 (Section 1.3)
@@ -104,24 +104,7 @@
 
 ---
 
-## 六、服务器信息
-
-### 236 服务器 (主实验服务器)
-- SSH: `ssh research@115.190.215.236`
-- 项目: `/mnt/disk2/lijunlin/vqa-hallucination`
-- Conda: `/mnt/disk3/conda/miniconda3/envs/zh/bin`
-- RLHF-V: `/mnt/disk2/lijunlin/hf_cache/rlhf_v_data/rlhf-v.parquet` (现已复制到项目内)
-- 模型: `../downloads/models/Qwen3-VL-8B-Instruct`
-- COCO: `../downloads/coco/val2014`
-
-### 37 服务器 (不完整副本, 仅备用)
-- SSH: `ssh research@115.190.234.37`
-- 需要 Clash 代理绕过 (DIRECT 规则)
-- 项目: `/mnt/disk2/lijunlin/vqa-hallucination` (只有基础 SFT+DPO)
-
----
-
-## 七、RLAIF-V 补充实验 (进行中)
+## 六、RLAIF-V 补充实验 (进行中)
 
 **启动时间**: 2026-04-06 18:32
 
@@ -132,11 +115,9 @@
 | epoch1 (SFT50K+β=0.1+1ep) | 0,1 DDP | 2.2% | 4/6 ~23:00 |
 | only (Base+β=0.1+3ep) | 7 单卡 | tokenize 91% | 4/7 ~12:00 |
 
-详见 `RLAIFV_MMBENCH_PLAN.md`
-
 ---
 
-## 八、待做事项 (按优先级)
+## 七、待做事项 (按优先级)
 
 1. **监控训练** — 5 分钟自动检查 GPU + 进度 + 错误 (已配置)
 2. **训练完成后评估** — POPE + CHAIR (已有脚本), MMBench (待写脚本)

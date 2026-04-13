@@ -9,8 +9,8 @@ export PROJECT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 # 基础存储目录 (大容量磁盘)
 STORAGE_DIR="$(dirname "${PROJECT_DIR}")"
 
-# 模型本地路径
-export MODEL_PATH="${STORAGE_DIR}/downloads/models/Qwen3-VL-8B-Instruct"
+# 模型本地路径 (可通过环境变量覆盖)
+export MODEL_PATH="${MODEL_PATH:-${STORAGE_DIR}/downloads/models/Qwen3-VL-8B-Instruct}"
 
 # COCO 图像目录
 export COCO_TRAIN_DIR="${STORAGE_DIR}/downloads/coco/train2017"

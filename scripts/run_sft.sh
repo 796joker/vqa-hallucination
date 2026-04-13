@@ -12,7 +12,7 @@ if ls results/sft/lora_r8/checkpoint-* 1>/dev/null 2>&1; then
     RESUME_ARG="--resume_from_checkpoint true"
 fi
 
-FORCE_TORCHRUN=1 NNODES=1 NPROC_PER_NODE=2 CUDA_VISIBLE_DEVICES=4,5 \
+FORCE_TORCHRUN=1 NNODES=1 NPROC_PER_NODE=2 CUDA_VISIBLE_DEVICES=${CUDA_VISIBLE_DEVICES:-0,1} \
     llamafactory-cli train configs/qwen3vl_sft_lora.yaml ${RESUME_ARG}
 
 echo "=== SFT Training Complete ==="

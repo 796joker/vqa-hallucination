@@ -1,0 +1,26 @@
+{
+  "pope_adversarial.json": {
+    "accuracy": 0.8593,
+    "precision": 0.8433,
+    "recall": 0.8827,
+    "f1": 0.8625,
+    "yes_ratio": 0.5233,
+    "total": 3000
+  },
+  "pope_popular.json": {
+    "accuracy": 0.894,
+    "precision": 0.9031,
+    "recall": 0.8827,
+    "f1": 0.8928,
+    "yes_ratio": 0.4887,
+    "total": 3000
+  },
+  "pope_random.json": {
+    "accuracy": 0.9253,
+    "precision": 0.965,
+    "recall": 0.8827,
+    "f1": 0.922,
+    "yes_ratio": 0.4573,
+    "total": 3000
+  }
+}

@@ -24,6 +24,7 @@ os.makedirs(out_dir, exist_ok=True)
 
 questions = []
 saved_images = set()
+written_txts = set()
 
 for idx, item in enumerate(ds):
     cat = item["category"]
@@ -55,9 +56,15 @@ for idx, item in enumerate(ds):
         saved_images.add(img_key)
 
     # Write txt file (for official format compatibility)
+    # Clear existing txt files on first write per file to avoid duplicates on re-run
     txt_name = os.path.splitext(img_file)[0] + ".txt"
     txt_path = os.path.join(cat_dir, txt_name)
-    with open(txt_path, "a", encoding="utf-8") as f:
+    if txt_path not in written_txts:
+        mode = "w"
+        written_txts.add(txt_path)
+    else:
+        mode = "a"
+    with open(txt_path, mode, encoding="utf-8") as f:
         f.write(f"{item['question']}\t{item['answer']}\n")
 
     split = "perception" if cat in PERCEPTION else "cognition"

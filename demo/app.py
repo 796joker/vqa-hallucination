@@ -7,6 +7,9 @@ Model: Qwen3-VL-8B-Instruct + LoRA (SFT 5K + DPO β=1.0 1ep)
 """
 
 import re
+import os
+import sys
+import random
 import argparse
 import torch
 import gradio as gr
@@ -14,13 +17,14 @@ from PIL import Image
 from transformers import Qwen3VLForConditionalGeneration, AutoProcessor
 from peft import PeftModel
 from qwen_vl_utils import process_vision_info
+from typing import Optional
 
 
 # ---------------------------------------------------------------------------
 # Model loading
 # ---------------------------------------------------------------------------
 
-def load_model(base_model_path: str, adapter_path: str | None = None, use_4bit: bool = False):
+def load_model(base_model_path: str, adapter_path: Optional[str] = None, use_4bit: bool = False):
     """Load base model, optionally merge a LoRA adapter."""
     kwargs = {
         "torch_dtype": torch.bfloat16,
@@ -48,6 +52,22 @@ def load_model(base_model_path: str, adapter_path: str | None = None, use_4bit: 
 # ---------------------------------------------------------------------------
 
 THINK_TAG_RE = re.compile(r"</?think>")
+YES_RE = re.compile(r"\byes\b", re.IGNORECASE)
+NO_RE = re.compile(r"\bno\b", re.IGNORECASE)
+
+
+def parse_yesno(text: str) -> str:
+    """Extract yes/no from model output using word boundary matching."""
+    text_lower = text.lower().strip()
+    if text_lower.startswith("yes"):
+        return "yes"
+    if text_lower.startswith("no"):
+        return "no"
+    if YES_RE.search(text):
+        return "yes"
+    if NO_RE.search(text):
+        return "no"
+    return "unknown"
 
 
 def clean_output(text: str) -> str:
@@ -177,6 +197,21 @@ PRESET_QUESTIONS = {
     "自定义问题": "",
 }
 
+EXAMPLE_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "examples")
+
+
+def get_example_images(limit=6):
+    """Return list of valid example image paths (skip broken symlinks)."""
+    if not os.path.isdir(EXAMPLE_DIR):
+        return []
+    result = []
+    for f in sorted(os.listdir(EXAMPLE_DIR)):
+        if f.lower().endswith(('.jpg', '.jpeg', '.png')):
+            path = os.path.join(EXAMPLE_DIR, f)
+            if os.path.isfile(path) and os.path.getsize(path) > 1000:
+                result.append(path)
+    return result[:limit]
+
 
 # ---------------------------------------------------------------------------
 # Gradio UI
@@ -203,12 +238,14 @@ def create_demo(base_model, ft_model, processor):
         lines = []
         is_yesno = any(kw in question.lower() for kw in ["yes or no", "是否", "有没有"])
         if is_yesno:
-            b = "yes" if "yes" in base.lower() else "no"
-            f = "yes" if "yes" in ft.lower() else "no"
+            b = parse_yesno(base)
+            f = parse_yesno(ft)
             if b != f:
                 lines.append(f"**判别差异**: Base={b}, True Optimal={f}")
             else:
                 lines.append(f"**判别一致**: 均回答 {b}")
+                if b == "yes" and f == "yes":
+                    lines.append("注意: 两个模型都回答 yes — 若实际不存在该物体，则为共同幻觉")
         b_len, f_len = len(base.split()), len(ft.split())
         if b_len > 0:
             ratio = f_len / b_len
@@ -229,23 +266,26 @@ def create_demo(base_model, ft_model, processor):
         if image is None:
             return "请上传图片"
         pil_image = Image.fromarray(image).convert("RGB")
-        import random
         random.seed(42)
         objects = random.sample(POPE_OBJECTS, min(8, len(POPE_OBJECTS)))
 
         rows = ["| 物体 | Base 模型 | True Optimal | 差异 |",
                 "|------|-----------|-------------|------|"]
+        base_yes = 0
+        ft_yes = 0
         for obj in objects:
             q = f"Is there a {obj} in this image? Answer yes or no."
             b = generate(base_model, processor, pil_image, q, max_tokens=16)
             f = generate(ft_model, processor, pil_image, q, max_tokens=16)
-            b_yn = "yes" if "yes" in b.lower() else "no"
-            f_yn = "yes" if "yes" in f.lower() else "no"
+            b_yn = parse_yesno(b)
+            f_yn = parse_yesno(f)
+            if b_yn == "yes":
+                base_yes += 1
+            if f_yn == "yes":
+                ft_yes += 1
             diff = "一致" if b_yn == f_yn else "不同"
             rows.append(f"| {obj} | {b_yn} | {f_yn} | {diff} |")
 
-        base_yes = sum(1 for r in rows[2:] if "| yes |" in r.split("|")[2])
-        ft_yes = sum(1 for r in rows[2:] if "| yes |" in r.split("|")[3])
         total = len(objects)
         rows.append("")
         rows.append(f"**Base Yes-Ratio**: {base_yes}/{total} = {base_yes/total:.1%}")
@@ -283,6 +323,13 @@ def create_demo(base_model, ft_model, processor):
             "---"
         )
 
+        example_images = get_example_images()
+        if not example_images:
+            gr.Markdown(
+                "> **提示**: 未检测到示例图片。运行 `python demo/download_examples.py` 下载，"
+                "或手动上传图片使用。"
+            )
+
         # Tab 1: Side-by-Side
         with gr.Tab("对比演示"):
             gr.Markdown("上传图片，选择问题类型，对比两个模型的回答。")
@@ -313,6 +360,26 @@ def create_demo(base_model, ft_model, processor):
                 outputs=[base_output, ft_output, analysis_output],
             )
 
+            if example_images:
+                gr.Examples(
+                    examples=[[img] for img in example_images],
+                    inputs=[img_input],
+                    label="示例图片（点击直接使用）",
+                )
+
+            with gr.Accordion("边界案例提示（展示模型局限性）", open=False):
+                gr.Markdown("""
+**以下场景容易触发幻觉，适合展示模型局限性：**
+
+1. **共现混淆**: 图中有卡车 → 问 "Is there a car?"（高共现物体对容易误判）
+2. **小/遮挡物体**: 询问远处或被部分遮挡的物体（背景中的椅子、远处的时钟）
+3. **相似物体**: 滑雪板 vs 雪橇、叉子 vs 勺子
+4. **复杂场景**: 餐桌（多物体堆叠）、街景（多类别物体密集）
+5. **计数任务**: "How many people are in this image?" — 两个模型都容易出错
+
+**展示技巧：** 两个模型都回答 "yes" 时，可能是共同幻觉（POPE 评估中约 11% 的对抗样本双模型均错误）。True Optimal 更保守（yes-ratio 0.413 vs Base 0.431），偶尔会过度保守导致漏检。
+""")
+
         # Tab 2: POPE-style Hallucination Test
         with gr.Tab("幻觉检测 (POPE)"):
             gr.Markdown(
@@ -324,6 +391,13 @@ def create_demo(base_model, ft_model, processor):
                 pope_result = gr.Markdown(label="POPE 检测结果")
             pope_btn = gr.Button("运行幻觉检测", variant="primary")
             pope_btn.click(fn=pope_test, inputs=[pope_img], outputs=[pope_result])
+
+            if example_images:
+                gr.Examples(
+                    examples=[[img] for img in example_images[:4]],
+                    inputs=[pope_img],
+                    label="示例图片",
+                )
 
         # Tab 3: Caption Comparison (CHAIR-style)
         with gr.Tab("描述对比 (CHAIR)"):
@@ -343,6 +417,13 @@ def create_demo(base_model, ft_model, processor):
                 inputs=[caption_img],
                 outputs=[caption_base, caption_ft, caption_analysis],
             )
+
+            if example_images:
+                gr.Examples(
+                    examples=[[img] for img in example_images[:4]],
+                    inputs=[caption_img],
+                    label="示例图片",
+                )
 
         # Tab 4: Metrics Dashboard
         with gr.Tab("实验指标"):
@@ -393,29 +474,70 @@ Total: 1 hour, ~$2.50
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="VQA Hallucination Demo")
     parser.add_argument("--model_path", type=str,
-                        default="../downloads/models/Qwen3-VL-8B-Instruct")
+                        default=os.environ.get("MODEL_PATH", "models/Qwen3-VL-8B-Instruct"),
+                        help="Path to base model (or set MODEL_PATH env var)")
     parser.add_argument("--adapter_path", type=str,
-                        default="results/ablation/dpo_true_optimal",
-                        help="Path to True Optimal adapter (SFT 5K + DPO β=1.0 1ep)")
+                        default=os.environ.get("ADAPTER_PATH", "results/ablation/dpo_true_optimal"),
+                        help="Path to True Optimal adapter (or set ADAPTER_PATH env var)")
     parser.add_argument("--use_4bit", action="store_true",
                         help="Load models in 4-bit quantization (saves ~20GB VRAM)")
-    parser.add_argument("--port", type=int, default=7860)
+    parser.add_argument("--port", type=int,
+                        default=int(os.environ.get("GRADIO_PORT", "6006")))
     parser.add_argument("--share", action="store_true",
                         help="Create a public Gradio share link")
     args = parser.parse_args()
 
+    # Validate paths before loading
+    if not os.path.isdir(args.model_path):
+        print(f"ERROR: Base model not found at: {args.model_path}")
+        print("Please download first:")
+        print("  hf download Qwen/Qwen3-VL-8B-Instruct --local-dir models/Qwen3-VL-8B-Instruct")
+        print("Or specify via: --model_path /path/to/model  or  MODEL_PATH=/path/to/model")
+        sys.exit(1)
+    if not os.path.isdir(args.adapter_path):
+        print(f"ERROR: Adapter not found at: {args.adapter_path}")
+        print("Please ensure the repo is cloned with adapter weights.")
+        print("Or specify via: --adapter_path /path/to/adapter  or  ADAPTER_PATH=/path/to/adapter")
+        sys.exit(1)
+
     print("=" * 60)
     print("VQA Hallucination Mitigation Demo")
     print("=" * 60)
+    print(f"  Base model:  {os.path.abspath(args.model_path)}")
+    print(f"  Adapter:     {os.path.abspath(args.adapter_path)}")
+    print(f"  4-bit:       {args.use_4bit}")
+    print(f"  Port:        {args.port}")
+    valid_examples = get_example_images()
+    if not valid_examples:
+        print("  Examples:    NONE (run: python demo/download_examples.py)")
+    else:
+        print(f"  Examples:    {len(valid_examples)} images")
+    if torch.cuda.is_available():
+        print(f"  GPU:         {torch.cuda.get_device_name(0)}")
+        vram_gb = torch.cuda.get_device_properties(0).total_mem / 1024**3
+        print(f"  VRAM:        {vram_gb:.1f} GB")
+        if vram_gb < 20 and not args.use_4bit:
+            print(f"  WARNING: VRAM < 20GB, consider using --use_4bit")
+    else:
+        print("  WARNING: No CUDA GPU detected, model loading will be very slow")
+    print("=" * 60)
 
-    print(f"\n[1/3] Loading processor from {args.model_path} ...")
-    processor = AutoProcessor.from_pretrained(args.model_path, trust_remote_code=True)
+    try:
+        print(f"\n[1/3] Loading processor from {args.model_path} ...")
+        processor = AutoProcessor.from_pretrained(args.model_path, trust_remote_code=True)
 
-    print(f"[2/3] Loading base model ...")
-    base_model = load_model(args.model_path, use_4bit=args.use_4bit)
+        print(f"[2/3] Loading base model ...")
+        base_model = load_model(args.model_path, use_4bit=args.use_4bit)
 
-    print(f"[3/3] Loading True Optimal model (adapter: {args.adapter_path}) ...")
-    ft_model = load_model(args.model_path, args.adapter_path, use_4bit=args.use_4bit)
+        print(f"[3/3] Loading True Optimal model (adapter: {args.adapter_path}) ...")
+        ft_model = load_model(args.model_path, args.adapter_path, use_4bit=args.use_4bit)
+    except torch.cuda.OutOfMemoryError:
+        print("\nERROR: GPU out of memory!")
+        print("Try: python demo/app.py --use_4bit")
+        sys.exit(1)
+    except Exception as e:
+        print(f"\nERROR loading models: {e}")
+        sys.exit(1)
 
     print(f"\nModels loaded. Starting Gradio on port {args.port} ...")
     demo = create_demo(base_model, ft_model, processor)

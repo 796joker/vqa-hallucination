@@ -14,16 +14,16 @@ echo "Adapter: results/ablation/dpo_true_optimal (SFT 5K + DPO beta=1.0 1ep)"
 echo ""
 
 # Default: load both models in bf16 (~32GB total, needs GPU with >=40GB free)
-CUDA_VISIBLE_DEVICES=4 python demo/app.py \
+CUDA_VISIBLE_DEVICES=${CUDA_VISIBLE_DEVICES:-0} python demo/app.py \
     --model_path "${MODEL_PATH}" \
     --adapter_path results/ablation/dpo_true_optimal \
-    --port 7860 \
+    --port ${GRADIO_PORT:-6006} \
     --share
 
 # If OOM, use 4-bit quantization (~16GB total):
-# CUDA_VISIBLE_DEVICES=4 python demo/app.py \
+# CUDA_VISIBLE_DEVICES=${CUDA_VISIBLE_DEVICES:-0} python demo/app.py \
 #     --model_path "${MODEL_PATH}" \
 #     --adapter_path results/ablation/dpo_true_optimal \
 #     --use_4bit \
-#     --port 7860 \
+#     --port ${GRADIO_PORT:-6006} \
 #     --share

@@ -13,7 +13,7 @@ Output structure:
     └── questions.json
 
 Then scp data/mme/ to the server:
-    scp -r data/mme research@115.190.215.236:/mnt/disk2/lijunlin/vqa-hallucination/data/
+    scp -r data/mme <user>@<server>:/path/to/vqa-hallucination/data/
 
 Usage:
     python scripts/prepare_mme.py --output_dir data/mme
@@ -42,6 +42,7 @@ def main():
     questions = []
     categories = set()
     img_counters = {}
+    written_txts = set()
 
     for idx, item in enumerate(dataset):
         category = item["category"]
@@ -86,8 +87,13 @@ def main():
         if not os.path.exists(img_path):
             image.save(img_path)
 
-        # Append question to txt file
-        with open(txt_path, "a", encoding="utf-8") as f:
+        # Write question to txt file (first write clears to avoid duplicates on re-run)
+        if txt_path not in written_txts:
+            mode = "w"
+            written_txts.add(txt_path)
+        else:
+            mode = "a"
+        with open(txt_path, mode, encoding="utf-8") as f:
             f.write(f"{question}\t{answer}\n")
 
         img_counters[counter_key] += 1
@@ -120,7 +126,7 @@ def main():
     print(f"Categories: {sorted(categories)}")
     print(f"Output: {args.output_dir}")
     print(f"\nNext step: scp to server:")
-    print(f"  scp -r {args.output_dir} research@115.190.215.236:/mnt/disk2/lijunlin/vqa-hallucination/data/")
+    print(f"  scp -r {args.output_dir} <user>@<server>:/path/to/vqa-hallucination/data/")
 
 
 if __name__ == "__main__":

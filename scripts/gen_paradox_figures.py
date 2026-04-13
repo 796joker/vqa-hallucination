@@ -4,10 +4,11 @@ import matplotlib
 import numpy as np
 import os
 
-matplotlib.rcParams['font.sans-serif'] = ['Microsoft YaHei', 'SimHei']
+matplotlib.rcParams['font.sans-serif'] = ['Microsoft YaHei', 'SimHei', 'DejaVu Sans']
 matplotlib.rcParams['axes.unicode_minus'] = False
 
-out_dir = r'D:\硕士阶段\研一下\大模型后训练\Course design\vqa-hallucination\report\figures'
+out_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'report', 'figures')
+os.makedirs(out_dir, exist_ok=True)
 
 models = ['Base', 'SFT 50K', 'DPO-only', 'True\nOptimal']
 colors = ['#60a5fa', '#f87171', '#4ade80', '#fbbf24']
